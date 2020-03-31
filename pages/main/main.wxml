@@ -1,0 +1,151 @@
+<!--pages/main/main.wxml-->
+<cu-custom bgColor="bg-gradual-3e">
+	<view slot="content">颜色控制</view>
+</cu-custom>
+<!--已连接-->
+<view class="page">
+	<view class="cu-card">
+		<view class="linear-gradient cu-item shadow-blur" style="background:#3e3e3e">
+			<view class="card1">
+				<text class="cuIcon-homefill"></text>已连接
+				<button size="mini" class="cu-btn bg-black shadow" bindtap="showModal" data-target="bottomModal">复制灯光设置</button>
+				<view class="cu-bar solid-bottom ">
+					<view class="action">
+						至 {{deviceId}}
+					</view>
+					<view class="action">
+						<button size="mini" class="cu-btn round" bindtap="closeConnection">断开连接</button>
+					</view>
+				</view>
+			</view>
+			<view class="padding">
+				<view class="cu-progress round">
+					<view class="bg-green" style="width:{{loading?'80%':'80%'}};"></view>
+				</view>
+			</view>
+		</view>
+	</view>
+
+	<!--功能Tab页面部分-->
+	<scroll-view scroll-x class="nav">
+		<!--Tab布局-->
+		<view class="bg-sane flex text-center">
+			<view class="cu-item flex-sub {{index==currentIndex?'text-green cur':''}}" wx:for="{{3}}" wx:key="index" bindtap="tabSelect" data-id="{{index}}">
+				<view wx:if="{{index=='0'}}">颜色</view>
+				<view wx:if="{{index=='1'}}">色温</view>
+				<view wx:if="{{index=='2'}}">开发中...</view>
+			</view>
+		</view>
+		<!--内容-->
+		<swiper class='swiperX' bindchange='tabChange' current='{{currentIndex}}'>
+			<swiper-item>
+				<view wx:for="{{firstList}}" wx:for-item="item">
+					<!--第一部分 -->
+					<view class="cu-list menu">
+						<view class="cu-item" data-id="1" bindtap="toggleColorPicker">
+							<view class="content">
+								<text class="cuIcon-colorlens text-grey"></text>
+								<text class="text-grey">颜色~</text>
+								<text class="colorG" style="background:{{colorData1.pickerData.hex}}"></text>
+							</view>
+							<view class="action">
+								<view class="cu-tag round bg-white">{{colorData1.pickerData.hex}}</view>
+								<view class="cu-tag round bg-red light">R:{{colorData1.pickerData.red}}</view>
+								<view class="cu-tag round bg-green light">G:{{colorData1.pickerData.green}}</view>
+								<view class="cu-tag round bg-blue light">B:{{colorData1.pickerData.blue}}</view>
+								<view calss="current">
+								</view>
+							</view>
+						</view>
+						<view class="padding">
+							<!--重中之重-->
+							<view class="flex" data-id="1" bindtap="toggleColorPicker">
+
+								<view class="color" style="background:{{colorData1.pickerData.hex}}"></view>
+							</view>
+							<view class="color-picker-wrapper" wx:if="{{showColorPicker1}}">
+								<color-picker data-id="1" class="color-picker" colorData="{{colorData1}}" rpxRatio="{{rpxRatio}}" bindchangecolor="onChangeColor"></color-picker>
+							</view>
+						</view>
+						<view class="wrapper wrapper-relative">
+						</view>
+					</view>
+					<!--end第一部分-->
+					<view class="current ">
+						<text class="hex">{{colorData1.pickerData.hex}}\nRGB: ({{colorData1.pickerData.red}},{{colorData1.pickerData.green}},{{colorData1.pickerData.blue}})\nHSB: ({{colorData1.pickerData.Hue}}°,{{colorData1.pickerData.Saturation}}%,{{colorData1.pickerData.Lightness}}%)</text>
+					</view>
+				</view>
+			</swiper-item>
+			<swiper-item>
+				<view wx:for="{{secondList}}" wx:for-item="item">
+					<view class="cu-list menu">
+						<!--#2#色温 -->
+						<view class="cu-item" bindtap="closeColorPicker">
+							<view class="content">
+								<text class="cuIcon-circlefill text-grey"></text>
+								<text class="text-grey">色温</text>
+							</view>
+							<view class="action">
+								<view class="cu-tag round bg-gradual-temp light">{{sliderCCT}}</view>
+							</view>
+						</view>
+						<slider bindchanging="onChangeCCT" bindchange="onChangeCCT" min="2500" max="8500" step="100" value="{{sliderCCT}}" show-value />
+						<!--#2亮度 -->
+						<view class="cu-item" bindtap="closeColorPicker">
+							<view class="content">
+								<text class="cuIcon-circlefill text-grey"></text>
+								<text class="text-grey">亮度</text>
+							</view>
+							<view class="action">
+								<view>{{sliderB}}%</view>
+							</view>
+						</view>
+						<slider bindchanging="onChangeLD" bindchange="onChangeLD" min="0" max="100" step="1" value="{{sliderB}}" show-value />
+					</view>
+				</view>
+			</swiper-item>
+			<swiper-item>
+				<view wx:for="{{thirdList}}" wx:for-item="item">
+					<view>
+						<view wx:for="{{secondList}}" wx:for-item="item">
+							<view class="cu-list menu">
+								<!--#换算 -->
+								<view class="cu-item" bindtap="closeColorPicker">
+									<view class="content">
+										<text class="cuIcon-circlefill text-grey"></text>
+										<text class="text-grey">换算RGB->HSB</text>
+									</view>
+								</view>
+    <slider bindchanging="onChangeR" bindchange="onChangeR" activeColor="red" block-size="12" min="0" max="255" step="1" value="{{LOADING1.sliderRGBR}}"  show-value/>
+    <slider bindchanging="onChangeG" bindchange="onChangeG" activeColor="green" block-size="12" min="0" max="255" step="1" value="{{LOADING1.sliderRGBG}}" show-value/>
+    <slider bindchanging="onChangeB" bindchange="onChangeB" activeColor="blue" block-size="12" min="0" max="255" step="1" value="{{LOADING1.sliderRGBB}}" show-value/>
+    <text>===>HSB: ({{LOADING1.Hue2}}°,{{LOADING1.Saturation2}}%,{{LOADING1.Lightness2}}%)</text>
+								<!--#loading -->
+								<view class="cu-item" bindtap="closeColorPicker">
+									<view class="content">
+										<text class="cuIcon-circlefill text-grey"></text>
+										<text class="text-grey">loading</text>
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</swiper-item>
+		</swiper>
+	</scroll-view>
+
+	<!--test-->
+
+	<view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
+		<view class="cu-dialog">
+			<view class="cu-bar bg-white">
+				<view class="action text-green" bindtap="CopyLink">复制</view>
+				<view class="action text-blue" bindtap="hideModal">取消</view>
+			</view>
+			<view class="padding-xl">
+				red:{{colorData1.pickerData.red}} green:{{colorData1.pickerData.green}} blue:{{colorData1.pickerData.blue}}
+			</view>
+		</view>
+	</view>
+</view>

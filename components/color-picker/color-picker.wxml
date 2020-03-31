@@ -1,0 +1,22 @@
+<view id="wrapper" class="color-picker-container">
+  <view class="wrapper">
+    <view class="pick-area">
+      <view class="color-picker-map" catchtouchmove="_chooseColor" bindtap="_chooseColor">
+        <view class="color-picker-map-item solid" style="background:rgb({{hueData.colorStopRed}},{{hueData.colorStopGreen}},{{hueData.colorStopBlue}})"></view>
+        <view class="color-picker-map-item white" style="background:linear-gradient(to right, rgba(255,255,255,1), rgba({{hueData.colorStopRed}},{{hueData.colorStopGreen}},{{hueData.colorStopBlue}},0));"></view>
+        <view class="color-picker-map-item black" style="background:linear-gradient(to top, rgba(0,0,0,1), rgba({{hueData.colorStopRed}},{{hueData.colorStopGreen}},{{hueData.colorStopBlue}},0));">
+        </view>
+        <view class="picker" style="left:{{pickerData.x}}rpx;top:{{pickerData.y}}rpx;"></view>
+      </view>
+      <view class="color-picker-bar" catchtouchmove="_changeBar" bindtap="_changeBar">
+        <view class="picker" style="top:{{barZ}}rpx;"></view>
+      </view>
+    </view>
+    <view class="data-area">
+      <text>HSB滑动调节：</text>
+    </view>
+    <slider bindchanging="onChangeH" bindchange="onChangeH" block-size="12" min="0" max="360" step="1" value="{{pickerData.Hue}}"  show-value/>
+    <slider bindchanging="onChangeS" bindchange="onChangeS" block-size="12" step="1" value="{{pickerData.Saturation}}" show-value/>
+    <slider bindchanging="onChangeB" bindchange="onChangeB" block-size="12" step="1" value="{{pickerData.Lightness}}" show-value/>
+  </view> 
+</view>
